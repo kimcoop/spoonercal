@@ -49,16 +49,18 @@
 	width: 100%;
 	text-align: right;
 	position: relative;
-	top: -1em;
+	top: -.5em;
 }
 
 .title {
 	display: inline;
+	word-wrap: break-word;
 }
 
 .content {
 	position: relative;
 	top: -10px;
+	word-wrap: break-word;
 }
 
 .commentBox textarea {
@@ -78,4 +80,5 @@
 .comments {
 	clear: both;
 	font-size: .9em;
+	word-wrap: break-word;
 }
