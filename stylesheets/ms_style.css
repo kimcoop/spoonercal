@@ -112,7 +112,7 @@ input[type="text"] {
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
 
-#tripEditor {
+#tripEditor, #blogPost {
 	text-align: center;
 	border: thick solid #5ED2B8;
 	border-radius: 5px;
@@ -120,16 +120,17 @@ input[type="text"] {
 	padding: 5px 5px 10px;
 }
 
-#tripTable {
+#tripTable, #newBlogTable {
 	width: 100%;
 }
 
-#tripTable td.label {
+#tripTable td.label, td.label {
 	text-align: right;
 	width: 200px;
 }
 
-#tripTable input, #tripTable textarea {
+#tripTable input, #tripTable textarea,
+#newBlogTable input, #newBlogTable textarea {
 	width: 600px;
 }
 

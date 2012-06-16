@@ -1,0 +1,203 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+
+<title>MySpooner | Home</title>
+<meta name="description" content="My Parse App">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/ms_style.css">
+<link rel="stylesheet" href="stylesheets/jquery-ui.css">
+<link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.css' />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
+<script type='text/javascript' src='js/fullcalendar.min.js'></script>
+
+<script type="text/javascript">
+Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+
+$(function() {
+		
+	var currentUser = Parse.User.current();
+	if (currentUser) {
+		$('#username').text('Logged in as ' +currentUser.get('username'));
+	} else {
+		location.href = 'index.html';
+	}
+    
+    $("#logout").click(function() {
+	    Parse.User.logOut();
+
+		var currentUser = Parse.User.current();  // this will now be null
+		location.href='index.html';
+    });
+	
+	queryPosts(false);
+	
+	$('#postBlog').click(function() {
+		postBlog();
+	});
+	
+});
+
+function queryPosts(animate) {
+
+	var Post = Parse.Object.extend("Post");
+	var query = new Parse.Query(Post);
+	query.descending("createdAt");
+	query.find({
+	  success: function(results) {
+	  	var numPosts = results.length;
+	  	var postsStr = '';
+	  	
+	  	for (var i = 0; i < numPosts; i++) {
+	  		var post = results[i];
+		  	var pubDate = post.createdAt;
+		  	var title = post.get("title");
+		  	var author = post.get("author");
+		  	var content = post.get("content");
+		  	postsStr += divify(pubDate, title, author, content);
+		} //foreach
+	  	
+	  	if (!animate) $('#blog').html(postsStr);
+	  	else $('#blog').fadeOut('slow', function() {
+	  		$('#blog').html(postsStr).fadeIn();
+	  	});
+	  },
+	  error: function(error) {
+		console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+	
+	$('#doNewPost').click(function() {
+	
+		$('#blogPost').slideToggle();
+	
+	}); // doNewPost
+
+};
+
+function postBlog() {
+
+	var t = $('#title'); 
+	var c = $('#content');	
+	var title = t.attr('value');
+	var content = c.attr('value');
+	
+	if (title != '' && content != '') {
+	
+		var Trip = Parse.Object.extend("Post");
+		var trip = new Trip();
+		trip.set("title", title);
+		trip.set("content", content);
+		trip.set("author", Parse.User.current().get('username'));
+		trip.save(null, {
+		  success: function(trip) {
+			$('#blogPost').slideUp('slow', function() {
+				queryPosts(true);
+			});	
+			
+			t.attr('value', '');
+			c.attr('value', '');
+		  }// success
+		}); // save post
+	
+	} else {
+		alert('Please fill in title and content.');
+	}
+
+}; // postTrip
+
+function divify(pubDate, title, author, content) {
+	var d = $.datepicker.formatDate('DD, MM d, yy ', new Date(pubDate));
+	
+	var output = '<div class="post">';
+		output += '<div class=timestamp>'+d+'</div>';
+		output += '<div class=title>'+title+'</div>';
+		output += '<div class=author>'+author+'</div>';
+		output += '<div class=content>'+content+'</div>';	
+	output += '</div>';
+	return output;
+	
+};
+
+</script>
+  
+</head>
+
+<style>
+
+#doNewPost {
+	float: right;
+	margin-top: -2em;
+}
+
+#blogPost {
+	clear: both;
+}
+
+#newBlogtable td.label {
+	width: 70px;
+}
+
+#newBlogTable input, #newBlogTable textarea {
+	width: 730px;
+	z-index: 1;
+}
+
+#content {
+	height: 200px;
+}
+
+
+</style>
+
+<body>
+
+	<div id="header">
+		<span id="username" class="username"></span>
+		<div id="rightNav">
+			<a id="home" class="purple clickable" href="home.html">Home</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a id="tripPage" class="purple clickable" href="postTrip.html">Post Trip</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a id="calPage" class="purple clickable" href="calendar.html">View Calendar</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>	
+		</div>
+	</div><!-- header -->
+  
+  <div id="main">
+  	<br><br><br>
+  	<h1>Blog</h1>
+  	
+  	<h4 id="doNewPost" class="clickable">Create a blog post&nbsp;&raquo;</h4>  
+    <div id="message"></div>	
+  	
+  	<div id="blogPost">
+		<table class="box" id="newBlogTable">
+				<tr><td class="label">Blog post title</td>
+					<td><input id="title" type="text" placeholder="Title"/></td></tr>
+				<tr><td class="label">Content</td>
+					<td><textarea id="content" placeholder="Content"></textarea></td></tr>
+			</table><br>
+			
+			<input id="postBlog" type="button" value="Post"/>
+		</table>
+  	</div><!-- blogPost -->
+  	
+  	<div id="blog">
+  	
+  	
+  	
+  	</div><!-- /blog -->      
+  </div><!-- main -->
+
+</body>
+
+</html>
