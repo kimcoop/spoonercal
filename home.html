@@ -58,6 +58,10 @@ $(function() {
 	
 	queryTrips(false);
 	
+	$('#viewCal').click(function() {
+		location.href='calendar.html';
+	});
+	
 });
 
 function postTrip() {
@@ -187,6 +191,7 @@ function queryTrips(animate) {
     </div><!-- /tripEditor -->
     <br><br>
     <h1><span id="numTripsPosted"></span> Trips Posted</h1>
+    <h4 id="viewCal" class="clickable">View the Calendar&nbsp;&raquo;</h4>
     <div id="tripDisplay">
     	<table id="tripDisplayTable">
     		<thead>

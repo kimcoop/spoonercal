@@ -1,0 +1,121 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+
+<title>MySpooner | Home</title>
+<meta name="description" content="My Parse App">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/ms_style.css">
+<link rel="stylesheet" href="stylesheets/jquery-ui.css">
+<link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.css' />
+<link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.print.css' />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
+<script type='text/javascript' src='js/fullcalendar.min.js'></script>
+
+<script type="text/javascript">
+Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+
+$(function() {
+		
+	var currentUser = Parse.User.current();
+	if (currentUser) {
+		$('#username').text('Logged in as ' +currentUser.get('username'));
+	} else {
+		location.href = 'index.html';
+	}
+    
+    $("#logout").click(function() {
+	    Parse.User.logOut();
+
+		var currentUser = Parse.User.current();  // this will now be null
+		location.href='index.html';
+    });
+    
+    $('#calendar').fullCalendar({
+		events: function(start, end, callback) {
+			queryTrips(start, end, callback);
+		},
+		color: 'yellow',   // an option!
+		textColor: 'black' // an option!
+    });
+	
+	//queryTrips(false);
+	
+});
+
+function queryTrips(start, end, callback) {
+
+	var Trip = Parse.Object.extend("Trip");
+	var query = new Parse.Query(Trip);
+	query.find({
+	  success: function(results) {
+	  	var numTrips = results.length;
+	  	$('#numTripsPosted').text(numTrips);
+	  	var events = [];
+	  	
+	  	for (var i = 0; i < numTrips; i++) {
+	  		var trip = results[i];
+		  	var start = new Date(trip.get("start"));	  
+		  	var end = new Date(trip.get("end"));
+		  	var title = trip.get("people");	
+		  	
+			//var d = $.datepicker.formatDate('m/dd', pubDate);	
+			events.push({
+				title: title,
+				start: start,
+				end: end
+			});
+		}
+		
+		callback(events);
+	  	
+	  },
+	  error: function(error) {
+		console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+
+};
+
+</script>
+  
+</head>
+
+<style>
+
+#main {
+	padding: 30px 20px;
+}
+
+</style>
+
+<body>
+
+	<div id="header">
+	
+		<span id="username" class="username"></span>
+		<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>
+	
+	</div><!-- header -->
+  
+  <div id="main">
+  	<br><br>
+  	<h1>Calendar</h1>
+  
+  
+  
+  	<div id="calendar"></div><!-- /calendar -->
+  
+    
+  </div><!-- main -->
+
+</body>
+
+</html>

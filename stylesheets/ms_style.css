@@ -10,6 +10,10 @@ body {
 	background: transparent url('http://www.free-desktop-backgrounds.net/free-desktop-wallpapers-backgrounds/free-hd-desktop-wallpapers-backgrounds/723860876.jpg') no-repeat top center;
 }
 
+#main {
+	background: #fafafa;
+}
+
 .clickable {
 	cursor: pointer;
 }
@@ -167,6 +171,11 @@ input[type="text"] {
 #createTrip {
 	float: right;
 	margin-top: -3em;
+}
+
+#viewCal {
+	float: right;
+	margin-top: -2em;
 }
 
 #tripDisplay {
