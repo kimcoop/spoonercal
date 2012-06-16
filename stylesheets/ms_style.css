@@ -8,6 +8,7 @@ body {
 	font-family: "Helvetica Neue Light", arial;
 	color: #555;
 	background: transparent url('http://www.free-desktop-backgrounds.net/free-desktop-wallpapers-backgrounds/free-hd-desktop-wallpapers-backgrounds/723860876.jpg') no-repeat top center;
+	background: transparent url('../images/clouds1.jpg') no-repeat top center;
 }
 
 #main {
@@ -207,7 +208,7 @@ input[type="text"] {
 	word-wrap: break-word;
 }
 
-#welcome, h1 {
+#welcome, h1, h2 {
 	font-family: 'Patua One', georgia;
 }
 

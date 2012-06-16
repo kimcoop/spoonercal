@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="stylesheets/styles.css">
 <link rel="stylesheet" href="stylesheets/ms_style.css">
 <link rel="stylesheet" href="stylesheets/jquery-ui.css">
+<link rel="stylesheet" href="stylesheets/blog.css">
 <link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
 <link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.css' />
 
@@ -53,6 +54,7 @@ function queryPosts(animate) {
 	query.find({
 	  success: function(results) {
 	  	var numPosts = results.length;
+	  	$('#numPosts').text(numPosts + ' articles');
 	  	var postsStr = '';
 	  	
 	  	for (var i = 0; i < numPosts; i++) {
@@ -76,7 +78,7 @@ function queryPosts(animate) {
 	
 	$('#doNewPost').click(function() {
 	
-		$('#blogPost').slideToggle();
+		$('#blogPost').slideDown();
 	
 	}); // doNewPost
 
@@ -84,9 +86,10 @@ function queryPosts(animate) {
 
 function postBlog() {
 
-	var t = $('#title'); 
+	var t = $('#blogTitle'); 
 	var c = $('#content');	
 	var title = t.attr('value');
+	alert(title);
 	var content = c.attr('value');
 	
 	if (title != '' && content != '') {
@@ -117,9 +120,8 @@ function divify(pubDate, title, author, content) {
 	var d = $.datepicker.formatDate('DD, MM d, yy ', new Date(pubDate));
 	
 	var output = '<div class="post">';
-		output += '<div class=timestamp>'+d+'</div>';
-		output += '<div class=title>'+title+'</div>';
-		output += '<div class=author>'+author+'</div>';
+		output += '<h2 class=title>'+title+'</h2>';
+		output += '<div class=details>Posted '+d+' by ' +author + '</div>';
 		output += '<div class=content>'+content+'</div>';	
 	output += '</div>';
 	return output;
@@ -131,30 +133,6 @@ function divify(pubDate, title, author, content) {
 </head>
 
 <style>
-
-#doNewPost {
-	float: right;
-	margin-top: -2em;
-}
-
-#blogPost {
-	clear: both;
-}
-
-#newBlogtable td.label {
-	width: 70px;
-}
-
-#newBlogTable input, #newBlogTable textarea {
-	width: 730px;
-	z-index: 1;
-}
-
-#content {
-	height: 200px;
-}
-
-
 </style>
 
 <body>
@@ -174,7 +152,8 @@ function divify(pubDate, title, author, content) {
   
   <div id="main">
   	<br><br><br>
-  	<h1>Blog</h1>
+  	<h1 id="title">Blog</h1>
+  	<span id="numPosts"></span>
   	
   	<h4 id="doNewPost" class="clickable">Create a blog post&nbsp;&raquo;</h4>  
     <div id="message"></div>	
@@ -182,7 +161,7 @@ function divify(pubDate, title, author, content) {
   	<div id="blogPost">
 		<table class="box" id="newBlogTable">
 				<tr><td class="label">Blog post title</td>
-					<td><input id="title" type="text" placeholder="Title"/></td></tr>
+					<td><input id="blogTitle" type="text" placeholder="Title"/></td></tr>
 				<tr><td class="label">Content</td>
 					<td><textarea id="content" placeholder="Content"></textarea></td></tr>
 			</table><br>

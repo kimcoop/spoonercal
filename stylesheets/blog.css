@@ -1,0 +1,60 @@
+
+
+#doNewPost {
+	float: right;
+	margin-top: -2em;
+}
+
+#blogPost {
+	clear: both;
+}
+
+#newBlogtable td.label {
+	width: 70px;
+}
+
+#newBlogTable input, #newBlogTable textarea {
+	width: 730px;
+	z-index: 1;
+}
+
+#content {
+	height: 200px;
+}
+
+#numPosts {
+	color: #BBB;
+	position: relative;
+	top: -5px;
+}
+
+#blogPost {
+	display: none;
+	margin-bottom: 10px;
+}
+
+.post {
+	padding: 10px 5px;
+	border-bottom: 3px solid #6996D3;
+}
+
+.title {
+	margin: 0;
+}
+
+.details {
+	color: #BBB;
+	width: 100%;
+	text-align: right;
+	position: relative;
+	top: -1em;
+}
+
+.title {
+	display: inline;
+}
+
+.content {
+	position: relative;
+	top: -10px;
+}
