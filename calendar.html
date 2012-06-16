@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="stylesheets/jquery-ui.css">
 <link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
 <link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.css' />
-<link rel='stylesheet' type='text/css' href='stylesheets/fullcalendar.print.css' />
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
@@ -42,7 +41,7 @@ $(function() {
 		events: function(start, end, callback) {
 			queryTrips(start, end, callback);
 		},
-		color: 'yellow',   // an option!
+		color: 'purple',   // an option!
 		textColor: 'black' // an option!
     });
 	
@@ -94,26 +93,56 @@ function queryTrips(start, end, callback) {
 	padding: 30px 20px;
 }
 
+#calendar th {
+	font-family: "helvetica neue light", arial;
+	font-weight: normal;
+}
+
+.fc-first.fc-last {
+	background: #6996D3;
+	font-weight: normal;
+}
+
+.fc-state-highlight {
+	background: #5ED2B8;
+}
+
+.fc-event-skin {
+	border-color: #6996D3;
+	background-color: #6996D3;
+	color: #fff;
+}
+
+.fc-header-title h2 { 
+	font-family: 'Patua One', georgia;
+}
+
+.fc-header {
+	margin-bottom: -1em;
+}
+
 </style>
 
 <body>
 
 	<div id="header">
-	
 		<span id="username" class="username"></span>
-		<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>
-	
+		<div id="rightNav">
+			<a id="home" class="purple clickable" href="home.html">Home</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a id="tripPage" class="purple clickable" href="home.html">Post Trip</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a id="calPage" class="purple clickable" href="calendar.html">View Calendar</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>	
+		</div>
 	</div><!-- header -->
   
   <div id="main">
   	<br><br>
-  	<h1>Calendar</h1>
-  
-  
-  
-  	<div id="calendar"></div><!-- /calendar -->
-  
-    
+    <a class="green clickable" href="home.html">&laquo;&nbsp;Home</a>
+  	<h1>Spooner Trip Calendar</h1>
+  	<div id="calendar"></div><!-- /calendar -->      
   </div><!-- main -->
 
 </body>

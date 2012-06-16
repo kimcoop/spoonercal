@@ -18,6 +18,16 @@ body {
 	cursor: pointer;
 }
 
+a.green {
+	color: #5ED2B8;
+	text-decoration: none;
+}
+
+a.purple {
+	color: #7F70D8;
+	text-decoration: none;
+}
+
 h1 {
 	font-weight: normal;
 	color: #6996D3;
@@ -144,11 +154,6 @@ input[type="text"] {
 	left: 0;
 }
 
-#logout {
-	float: right;
-	margin-right: 2em;
-}
-
 .clickable:hover {
 	text-decoration: underline;
 }
@@ -204,4 +209,10 @@ input[type="text"] {
 
 #welcome, h1 {
 	font-family: 'Patua One', georgia;
+}
+
+#rightNav {
+	margin-right: 2em;
+	float: right;
+	display: inline;
 }

@@ -38,13 +38,74 @@ $(function() {
 		var currentUser = Parse.User.current();  // this will now be null
 		location.href='index.html';
     });
+    
+	$('#createTrip').click(function() {
 	
-	queryTrips();
+		$('#tripEditor').slideToggle();
+	
+	});// createTrip
+	
+	$('#start').datetimepicker({
+		ampm: true
+	});
+	$('#end').datetimepicker({
+		ampm: true
+	});
+	
+	$('#postTrip').click(function() {
+			postTrip();
+		}); // postTrip
+	
+	queryTrips(false);
+	
+	$('#viewCal').click(function() {
+		location.href='calendar.html';
+	});
 	
 });
 
+function postTrip() {
 
-function queryTrips() {
+	var p = $('#people'); 
+	var s = $('#start'); 
+	var e = $('#end');
+	var n = $('#notes');
+	
+	var people = p.attr('value');
+	var start = s.attr('value');
+	var end = e.attr('value');
+	var notes = n.attr('value');
+	
+	if (people != '' && start != '' && end != '') {
+	
+		var Trip = Parse.Object.extend("Trip");
+		var trip = new Trip();
+		trip.set("people", people);
+		trip.set("start", start);
+		trip.set("end", end);
+		trip.set("notes", notes);
+		trip.set("publisher", Parse.User.current().get('username'));
+		trip.save(null, {
+		  success: function(trip) {
+			$('#tripEditor').slideUp('slow', function() {
+				queryTrips(true);
+			});	
+			
+			p.attr('value', '');
+			s.attr('value', '');
+			e.attr('value', '');
+			n.text('value', '');
+								
+		  }// success
+		}); // save trip
+	
+	} else {
+		alert('Please fill in people, start date, and end date.');
+	}
+
+}; // postTrip
+
+function queryTrips(animate) {
 
 	var Trip = Parse.Object.extend("Trip");
 	var query = new Parse.Query(Trip);
@@ -73,7 +134,8 @@ function queryTrips() {
 		  	tripsStr += '<tr>' + str + '</tr>';
 		}
 		
-		el.append(tripsStr);
+		if (animate) el.fadeOut().append(tripsStr).fadeIn();
+		else el.append(tripsStr);
 	  	
 	  },
 	  error: function(error) {
@@ -115,7 +177,7 @@ function queryTrips() {
   	<br><br>
     <div id="welcome"><h2>Welcome, <span class='username'></span></h2></div>
     <span id="today"></span>
-    <a href="postTrip.html" class="green clickable" id="createTrip" class="clickable">Post your Spooner Trip&nbsp;&raquo;</a>
+    <h4 id="createTrip" class="clickable">Post your Spooner trip&nbsp;&raquo;</h4>
     <div id="message"></div>    
     
     <div id="tripEditor">
@@ -136,7 +198,7 @@ function queryTrips() {
     </div><!-- /tripEditor -->
     <br><br>
     <h1><span id="numTripsPosted"></span> Trips Posted</h1>
-    <a href="calendar.html" id="viewCal" class="green clickable">View the Calendar&nbsp;&raquo;</a>
+    <h4 id="viewCal" class="clickable">View the Calendar&nbsp;&raquo;</h4>
     <div id="tripDisplay">
     	<table id="tripDisplayTable">
     		<thead>
