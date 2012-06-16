@@ -2,8 +2,8 @@
 <head>
 <meta charset="utf-8">
 
-<title>MySpooner | Home</title>
-<meta name="description" content="My Parse App">
+<title>MySpooner | Post Trip</title>
+<meta name="description" content="My Spooner Trip">
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="stylesheets/reset.css">
 <link rel="stylesheet" href="stylesheets/styles.css">
@@ -120,13 +120,14 @@ function postTrip() {
   	<br><br><br>
   	
     <h1>Your Spooner Trip</h1>
-    <div id="message"></div>    
+    <h4>Note: You may also use this tool to post events! Just make "trip title" your event's name, and post any details in "notes."</h4> 
+    <div id="message"></div>  
     
     <div id="tripEditor">
     
     	<table class="box" id="tripTable">
-    		<tr><td class="label">List people going on the trip (include your name)</td>
-    			<td><input id="people" type="text" placeholder="People included"/></td></tr>
+    		<tr><td class="label">Trip title</td>
+    			<td><input id="people" type="text" placeholder="List people going on the trip (include your name)"/></td></tr>
     		<tr><td class="label">Trip start date</td>
     			<td><input id="start" type="text" placeholder="Start date"/></td></tr>
     		<tr><td class="label">Trip end date</td>
