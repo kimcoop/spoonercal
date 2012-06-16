@@ -1,0 +1,93 @@
+/*@blue: #6996D3;
+@purple: #7F70D8;
+@green: #5ED2B8;
+@orange: #FFCA73;
+*/
+
+body {
+	font-family: "Helvetica Neue Light", arial;
+	color: #555;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+h1 {
+	font-weight: normal;
+	color: #6996D3;
+	text-shadow: 1px 1px 0 #f3f3f3;
+	letter-spacing: -0.05em;
+	margin: 0;
+}
+
+h2 {
+	font-weight: normal;
+	color: #7F70D8;
+	text-shadow: 1px 1px 0 #f3f3f3;
+}
+
+h3 {
+	font-weight: normal;
+	color:#5ED2B8;
+}
+
+h4 {
+	font-weight: normal;
+	color: #5ED2B8;
+}
+
+
+input[type="password"], input[type="search"], input[type="text"], input[type="textbox"], input[type="textarea"], textarea, input[type="email"] {
+	border: thin solid #ddd;
+	color: #555;
+	cursor: pointer;
+	padding: 0.1em 0.4em 0.1em 0.4em;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	cursor: text;
+	font-size: .9em;
+}
+
+
+#do_signup, #do_login {
+	width: 100%;
+	text-align: right;
+}
+
+#do_signup:hover, #do_login:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#signup_box {
+	display: none;
+}
+
+.box {
+	width: 200px;
+	margin: 0px auto;
+}
+
+.box td {
+	text-align: center;
+	padding:.5em;
+}
+
+#message {
+	width: 100%;
+	border: thin solid #ffaa99;
+	color: #ffaa99;
+	padding: .4em 0;
+	margin: .5em 0;
+	min-height: 1em;
+	display: none;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }

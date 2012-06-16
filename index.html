@@ -1,0 +1,130 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+
+<title>MySpooner | Welcome</title>
+<meta name="description" content="MySpooner">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/ms_style.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
+
+<script type="text/javascript">
+Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+$(function() {
+
+$("#goButton").click(function() {
+	var username = $('#username').attr('value');
+	var password = $('#password').attr('value');
+	var email = $('#email').attr('value');
+	
+	var user = new Parse.User();
+	user.set("username", username);
+	user.set("password", password);
+	user.set("email", email);
+	
+	user.signUp(null, {
+	  success: function(user) {
+		location.href='home.html';
+	  },
+	  error: function(user, error) {
+		// Show the error message somewhere and let the user try again.
+		alert("Error: " + error.code + " " + error.message);
+	  }
+	});
+});  //click 
+	
+$('#login').click(function() {
+	var username = $('#l_username').attr('value');
+	var pw = $('#l_password').attr('value');
+
+	Parse.User.logIn(username, pw, {
+		success: function(user) {
+			location.href='home.html';
+		},
+		error: function(user, error) {
+			$('#message').text('Error logging in.').fadeIn().delay(2400).fadeOut();
+			console.log(error);
+		}
+	});
+
+}); // login
+
+$('#do_signup').click(function() {
+
+	var el = $('#login_box');
+	el.fadeOut('fast', function() {
+		$('#signup_box').fadeIn();
+	});
+
+
+}); //do signup     
+
+$('#do_login').click(function() {
+
+	var el = $('#signup_box');
+	el.fadeOut('fast', function() {
+		$('#login_box').fadeIn();
+	});
+
+}); // do login
+
+});
+
+</script>
+
+<style>
+
+#main {
+	margin-top: 100px;
+	border: thick solid #5ED2B8;
+	width: 500px;
+	padding: 30px 10px 0 10px;
+}
+
+</style>
+  
+</head>
+
+<body>
+  
+  <div id="main" style="text-align:center">
+    <h1>Welcome to MySpooner!</h1><br>
+    
+    <div id="message"></div>
+    
+    <div id="login_box">
+    	<table class="box">
+    		<tr><td>Username</td>
+    			<td><input type="text" id="l_username" placeholder="Your username" autofocus/></td></tr>
+    		<tr><td>Password</td>
+    			<td><input type="password" id="l_password" placeholder="Password"/></td></tr>
+		</table><br>
+		<input type="button" value="Log in" id="login">
+		
+		<h4 id="do_signup">New? Click here to get started&nbsp;&raquo;</h4>
+		
+    </div>
+    
+    <div id="signup_box">
+    	<table class="box">
+    		<tr><td>Username</td>
+    			<td><input type="text" id="username" placeholder="Your username"/></td></tr>
+    		<tr><td>Email</td>
+    			<td><input type="email" id="email" placeholder="Your email"/></td></tr>
+    		<tr><td>Password</td>
+    			<td><input type="password" id="password" placeholder="Password"/></td></tr>
+    	</table><br>
+		
+		<input type="button" value="Sign me up!" id="goButton">
+		
+		<h4 id="do_login">Return to login&nbsp;&raquo;</h4>
+    </div> 
+    
+  </div>
+
+</body>
+
+</html>

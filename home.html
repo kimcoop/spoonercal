@@ -1,0 +1,288 @@
+<!doctype html>
+<head>
+<meta charset="utf-8">
+
+<title>MySpooner | Home</title>
+<meta name="description" content="My Parse App">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="stylesheets/reset.css">
+<link rel="stylesheet" href="stylesheets/styles.css">
+<link rel="stylesheet" href="stylesheets/ms_style.css">
+<link rel="stylesheet" href="stylesheets/jquery-ui.css">
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
+
+<script type="text/javascript">
+Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+
+$(function() {
+		
+	var currentUser = Parse.User.current();
+	if (currentUser) {
+		$('.username').text(currentUser.get('username'));
+		$('#username').text('Logged in as ' +currentUser.get('username'));
+	} else {
+		location.href = 'index.html';
+	}   
+	
+	var today = $.datepicker.formatDate('DD, MM dd, yy', new Date());
+	$('#today').text(today);
+    
+    $("#logout").click(function() {
+	    Parse.User.logOut();
+
+		var currentUser = Parse.User.current();  // this will now be null
+		location.href='index.html';
+    });
+    
+	$('#createTrip').click(function() {
+	
+		$('#tripEditor').slideToggle();
+	
+	});// createTrip
+	
+	$('#start').datetimepicker({
+		ampm: true
+	});
+	$('#end').datetimepicker({
+		ampm: true
+	});
+	
+	$('#postTrip').click(function() {
+		var p = $('#people'); 
+		var s = $('#start'); 
+		var e = $('#end');
+		var n = $('#notes');
+		
+		var people = p.attr('value');
+		var start = s.attr('value');
+		var end = e.attr('value');
+		var notes = n.attr('value');
+	
+		var Trip = Parse.Object.extend("Trip");
+		var trip = new Trip();
+		trip.set("people", people);
+		trip.set("start", start);
+		trip.set("end", end);
+		trip.set("notes", notes);
+		trip.set("publisher", Parse.User.current().get('username'));
+		trip.save(null, {
+		  success: function(trip) {
+			$('#tripEditor').slideUp('slow', function() {
+				queryTrips(true);
+			});	
+			
+			p.attr('value', '');
+			s.attr('value', '');
+			e.attr('value', '');
+			n.text('value', '');
+								
+		  }// success
+		}); // postTrip
+    
+	});
+	
+	queryTrips(false);
+	
+});
+
+function queryTrips(animate) {
+
+	var Trip = Parse.Object.extend("Trip");
+	var query = new Parse.Query(Trip);
+	query.descending("createdAt");
+	query.find({
+	  success: function(results) {
+	  	var numTrips = results.length;
+	  	$('#numTripsPosted').text(numTrips);
+	  	var el = $('#tripDisplayTable');
+	  	var tripsStr = '';
+	  	
+	  	for (var i = 0; i < numTrips; i++) {
+	  		var trip = results[i];
+		  	var publisher = trip.get("publisher");
+		  	var pubDate = new Date(trip.createdAt);	  	
+		  	
+			var d = $.datepicker.formatDate('m/dd', pubDate);		  	
+		  	
+		  	var ppl = trip.get("people");
+		  	var start = trip.get("start");
+		  	var end = trip.get("end");
+		  	var notes = trip.get("notes");
+		  	var str = ppl + " from " + start + " til " + end + " (posted by " +publisher+")";
+		  	var str = '<td class=over>'+ppl+'</td><td>'+start+'</td><td>'+end+'</td><td class=over>'+notes+'</td><td>'+d+' by ' +publisher+'</td>';
+		  	
+		  	tripsStr += '<tr>' + str + '</tr>';
+		}
+		
+		if (animate) el.fadeOut().append(tripsStr).fadeIn();
+		else el.append(tripsStr);
+	  	
+	  },
+	  error: function(error) {
+		console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+
+};
+
+</script>
+  
+</head>
+
+<style>
+
+#tripEditor {
+	display: none;
+	text-align: center;
+	border: thick solid #5ED2B8;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px 5px 10px;
+}
+
+#tripTable {
+	width: 100%;
+}
+
+#tripTable td.label {
+	text-align: right;
+	width: 200px;
+}
+
+#tripTable input, #tripTable textarea {
+	width: 500px;
+}
+
+#header {
+	width: 100%;
+	min-height: 1em;
+	background: #1a1a1a;
+	color: #7F70D8;
+	font-weight: bold;
+	text-align: left;
+	padding: 1em;
+	margin: 0;
+	overflow: hidden;
+	border-bottom: thick solid #7F70D8;
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+	position: fixed;
+	z-index: 40;
+	top: 0;
+	left: 0;
+}
+
+#logout {
+	float: right;
+	margin-right: 2em;
+}
+
+.clickable:hover {
+	text-decoration: underline;
+}
+
+#message.success {
+	padding: .4em 0;
+	margin: .5em 0;
+	text-align: center;
+	background: #fff;
+	border-color: #5ED2B8;
+	color: #5ED2B8;
+}
+
+#today {
+	color: #bbb;
+	position: relative;
+	top: -25px;
+}
+
+#createTrip {
+	float: right;
+	margin-top: -3em;
+}
+
+#tripDisplay {
+	text-align: center;
+	border: thick solid #6996D3;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px 5px 10px;
+}
+#tripDisplayTable {
+	width: 100%;
+}
+
+#tripDisplayTable th {
+	min-width: 140px;
+}
+
+#tripDisplayTable tr:nth-child(odd) {
+	background: #f3f3f3;
+}
+
+#tripDisplayTable td {
+	max-width: 220px;
+	word-wrap: break-word;
+}
+
+</style>
+
+<body>
+
+	<div id="header">
+	
+		<span id="username" class="username"></span>
+		<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>
+	
+	</div><!-- header -->
+  
+  <div id="main">
+  	<br><br>
+    <div><h2>Welcome back, <span class='username'></span></h2>
+    <span id="today"></span>
+    <h4 id="createTrip" class="clickable">Post your Spooner trip&nbsp;&raquo;</h4>
+    <div id="message"></div>    
+    
+    <div id="tripEditor">
+    
+    	<table class="box" id="tripTable">
+    		<tr><td class="label">List people going on the trip (include your name)</td>
+    			<td><input id="people" type="text" placeholder="People included"/></td></tr>
+    		<tr><td class="label">Trip start date</td>
+    			<td><input id="start" type="text" placeholder="Start date"/></td></tr>
+    		<tr><td class="label">Trip end date</td>
+    			<td><input id="end" type="text" placeholder="End date"/></td></tr>
+    		<tr><td class="label">Notes about your trip</td>
+    			<td><input id="notes" type="text" placeholder="Notes"/></td></tr>
+    	</table><br>
+    	
+    	<input id="postTrip" type="button" value="Post Trip!"/>
+    
+    </div><!-- /tripEditor -->
+    <br><br>
+    <h1><span id="numTripsPosted"></span> Trips Posted</h1>
+    <div id="tripDisplay">
+    	<table id="tripDisplayTable">
+    		<thead>
+    			<tr>
+    				<th>People</th>
+    				<th>Arriving</th>
+    				<th>Leaving</th>
+    				<th>Notes</th>
+    				<th>Posted on</th>
+    			</tr>
+    		</thead>
+    	
+    	</table>
+    </div><!-- tripDisplay -->
+    
+  </div>
+
+</body>
+
+</html>
