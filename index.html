@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 
 <title>MySpooner | Welcome</title>
-<meta name="description" content="MySpooner">
+<meta name="description" content="The place for all of our family members to communicate over the interwebs">
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="stylesheets/reset.css">
 <link rel="stylesheet" href="stylesheets/styles.css">
@@ -14,7 +14,9 @@
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
 
 <script type="text/javascript">
-Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+//Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+Parse.initialize("CMAivk3SGCrLkZZ51JIwCYgB37Y7EWDx9uqxdowi", "uKcCk2dgJqC2QXRsQWJBUqpCONULL9KdlfrGiMGm");
+
 $(function() {
 	
 	var currentUser = Parse.User.current();
@@ -121,6 +123,9 @@ $('#do_login').click(function() {
     	<table class="box">
     		<tr><td>Username</td>
     			<td><input type="text" id="username" placeholder="Your username"/></td></tr>
+    		<tr><td colspan="2" class="small">
+    			Be sure to pick something that identifies you - this name is how your comments, trips, and blog posts will be authored.
+    		</td></tr>
     		<tr><td>Email</td>
     			<td><input type="email" id="email" placeholder="Your email"/></td></tr>
     		<tr><td>Password</td>

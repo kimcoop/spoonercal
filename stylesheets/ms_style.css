@@ -5,7 +5,8 @@
 */
 
 body {
-	font-family: "Helvetica Neue Light", arial;
+	font-family: "Helvetica Neue", arial;
+	font-weight: lighter;
 	color: #555;
 	background: transparent url('http://www.free-desktop-backgrounds.net/free-desktop-wallpapers-backgrounds/free-hd-desktop-wallpapers-backgrounds/723860876.jpg') no-repeat top center;
 	background: transparent url('../images/clouds1.jpg') no-repeat top center;
@@ -121,11 +122,11 @@ input[type="text"] {
 	padding: 5px 5px 10px;
 }
 
-#tripTable, #newBlogTable {
+#tripTable, #newBlogTable, #yourTripsTable {
 	width: 100%;
 }
 
-#tripTable td.label, td.label {
+#tripTable td.label, td.label, #yourTripsTable td.label {
 	text-align: right;
 	width: 200px;
 }
@@ -140,7 +141,7 @@ input[type="text"] {
 	min-height: 1em;
 	background: #1a1a1a;
 	color: #7F70D8;
-	font-weight: bold;
+	font-weight: normal;
 	text-align: left;
 	padding: 1em;
 	margin: 0;
@@ -216,4 +217,10 @@ input[type="text"] {
 	margin-right: 2em;
 	float: right;
 	display: inline;
+}
+
+.small {
+	font-size: .9em;
+	line-height: 1em;
+	font-style: italic;
 }

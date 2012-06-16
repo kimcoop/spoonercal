@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8">
 
-<title>MySpooner | Post Trip</title>
+<title>MySpooner | Your Trips</title>
 <meta name="description" content="My Spooner Trip">
 <meta name="viewport" content="width=device-width">
 <link rel="stylesheet" href="stylesheets/reset.css">
@@ -17,7 +17,8 @@
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
 
 <script type="text/javascript">
-Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+//Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
+Parse.initialize("CMAivk3SGCrLkZZ51JIwCYgB37Y7EWDx9uqxdowi", "uKcCk2dgJqC2QXRsQWJBUqpCONULL9KdlfrGiMGm");
 
 $(function() {
 		
@@ -30,8 +31,6 @@ $(function() {
 	}   
 	
 	$('#start').datetimepicker({
-		prevText: 'Prev',
-		nextText: 'Next',
 		ampm: true
 	});
 	$('#end').datetimepicker({
@@ -40,11 +39,67 @@ $(function() {
 	
 	$('#postTrip').click(function() {
 			postTrip();
-		}); // postTrip
-		
-	$('.ui-icon .ui-icon-circle-triangle-w').text('&laquo;');
+	}); // postTrip
+	
+	getTrips();
+	
+	$('.edit').live('click', function() {
+		alert('edit lcicked');
+	});
+	
+	$('.delete').live('click', function() {
+		alert('delete clicked');
+	});
 		
 });
+
+function getTrips() {
+	
+	var Trip = Parse.Object.extend("Trip");
+	var query = new Parse.Query(Trip);
+	query.equalTo("publisher", Parse.User.current().get('username'));
+	query.descending('createdAt');
+	query.find({
+	  success: function(results) {
+	  	if (results.length == 0) {
+			$('#yourTrips').html('You haven\'t posted any trips or events yet!');
+		} else {
+			listTrips(results);
+		}
+	  },
+	  error: function(error) {
+		console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+
+}; // getTrips
+
+function listTrips(trips) {
+
+	var el = $('#yourTripsTable');
+	var tripsStr = '';
+	
+	for (var i = 0; i < trips.length; i++) {
+		var trip = trips[i];
+		var pubDate = new Date(trip.createdAt);	  	
+		
+		var d = $.datepicker.formatDate('m/dd', pubDate);		  	
+		
+		var ppl = trip.get("people");
+		var start = trip.get("start");
+		var end = trip.get("end");
+		var notes = trip.get("notes");
+		var str = ppl + " from " + start + " til " + end;
+		var str = '<td class=over>'+ppl+'</td><td>'+start+'</td><td>'+end+'</td><td class=over>'+notes+'</td><td>'+d+'</td>';
+		str += '<td><span class="green clickable edit">Edit</span>&nbsp;&nbsp;';
+		str += '<span class="green clickable delete">Delete</span></td>';
+		
+		tripsStr += '<tr>' + str + '</tr>';
+	}
+	
+	el.append(tripsStr);
+
+}; // listTrips
 
 function postTrip() {
 
@@ -108,6 +163,8 @@ function postTrip() {
 		<div id="rightNav">
 			<a id="home" class="purple clickable" href="home.html">Home</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="purple clickable" href="blog.html">Blog</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a id="tripPage" class="purple clickable" href="postTrip.html">Post Trip</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a id="calPage" class="purple clickable" href="calendar.html">View Calendar</a>
@@ -119,8 +176,8 @@ function postTrip() {
   <div id="main">
   	<br><br><br>
   	
-    <h1>Your Spooner Trip</h1>
-    <h4>Note: You may also use this tool to post events! Just make "trip title" your event's name, and post any details in "notes."</h4> 
+    <h1>Post a Trip</h1>
+    <h4 style="margin-top:-.4em">Note: You can also use this tool to post events! Just make "trip title" your event's name, and post any details in "notes."</h4> 
     <div id="message"></div>  
     
     <div id="tripEditor">
@@ -140,6 +197,24 @@ function postTrip() {
     
     </div><!-- /tripEditor -->
     
+    <br><br>
+    
+    <h1>Your Trips</h1>
+    <div id="yourTrips">
+    <table id="yourTripsTable">
+		<thead>
+			<tr>
+				<th>People</th>
+				<th>Beginning</th>
+				<th>Ending</th>
+				<th>Notes</th>
+				<th>Posted</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+	
+	</table>    
+    </div><!-- /yourTrips -->    
     
   </div><!-- main -->
 
