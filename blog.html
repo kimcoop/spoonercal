@@ -63,6 +63,10 @@ $(function() {
 		viewComments(postId);
 	});
 	
+	$('#close').click(function() {
+		$('#blogPost').slideUp();
+	});
+	
 });
 
 function viewComments(postId) {
@@ -72,12 +76,12 @@ function viewComments(postId) {
 	query.find({
 	  success: function(comments) {
 	  	var num = comments.length;
-		console.log(comments);
 		var el = $('#commentsFor_'+postId);
 		if (num==0) {
-			el.append('No comments');
+			el.text('No comments').slideDown();
 		} else {
-			el.append(comments);
+			var commentStr = commentify(comments);
+			el.html(commentStr).slideDown();
 		}
 	  }
 	});
@@ -182,28 +186,76 @@ function divify(postId, pubDate, title, author, content) {
 		output += '<div class=details>Posted '+d+' by ' +author + '</div>';
 		output += '<div class=content>'+content+'</div>';
 		
-		output += '<h4 class="clickable viewComments" id="viewCommentsFor_'+postId+'">View Comments&nbsp;&raquo;</h4>';
+		output += '<h4 class="clickable viewComments" id="viewCommentsFor_'+postId+'">View Comments</h4>';
+		output += '<div class=comments id="commentsFor_'+postId+'"></div>';
 		
-		output += '<h4 class="clickable addComment">Add a comment&nbsp;&raquo;</h4>';
+		output += '<h4 class="clickable addComment">Add a comment</h4>';
 		output += '<div class=commentBox>';
 			output += '<textarea id="commentFor_'+postId+'" placeholder="Your comment here">';
 			output += '</textarea>';
 			output += '<input class=postComment type=button value=Post />';
 		output += '</div>';
-		
-		output += '<div class=comments id="commentsFor_'+postId+'">';
-		output += '</div>';
 			
 	output += '</div>';
 	return output;
 	
-};
+}; // divify
+
+function commentify(comments) {
+	var str = '';
+	for (var i = 0; i < comments.length; i++) {
+		var c = comments[i];
+		var pubDate = c.createdAt;
+		var d = $.datepicker.formatDate('D, M d ', new Date(pubDate));
+		var author = c.get("author");
+		var content = c.get("content");
+		str += '<div class=comment>';
+		str += '<div class=details>'+d+' by ' +author + '</div>';
+		str += '<div class=content>'+content+'</div></div>';
+	}
+	return str;
+
+}; // commentify
 
 </script>
   
 </head>
 
 <style>
+
+.commentBox {
+	height: 40px;
+	clear: both;
+}
+
+h4.addComment, h4.viewComments {
+	margin: 0 0 0 20px;
+	float: right;
+}
+
+.comment {
+	padding: .4em 0 0;
+	border-bottom: thin solid #ddd;
+}
+
+.comments {
+	clear: both;
+	display: none;
+	margin: 20px 0;
+}
+
+.comment .details {
+	top: 0;
+}
+
+.comments .content {
+	padding: 10px 0 2px;
+}
+
+#close {
+	float: right;
+}
+
 </style>
 
 <body>
@@ -238,6 +290,7 @@ function divify(postId, pubDate, title, author, content) {
 			</table><br>
 			
 			<input id="postBlog" type="button" value="Post"/>
+			<span id="close" class="clickable green">Close</span>
 		</table>
   	</div><!-- blogPost -->
   	

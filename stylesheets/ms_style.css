@@ -19,7 +19,7 @@ body {
 	cursor: pointer;
 }
 
-a.green {
+a.green, .green {
 	color: #5ED2B8;
 	text-decoration: none;
 }
