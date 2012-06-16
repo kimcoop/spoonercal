@@ -19,6 +19,7 @@ h1 {
 	text-shadow: 1px 1px 0 #f3f3f3;
 	letter-spacing: -0.05em;
 	margin: 0;
+	font-family: 'Patua One', georgia;
 }
 
 h2 {
@@ -91,3 +92,103 @@ input[type="password"], input[type="search"], input[type="text"], input[type="te
 .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+
+#tripEditor {
+	display: none;
+	text-align: center;
+	border: thick solid #5ED2B8;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px 5px 10px;
+}
+
+#tripTable {
+	width: 100%;
+}
+
+#tripTable td.label {
+	text-align: right;
+	width: 200px;
+}
+
+#tripTable input, #tripTable textarea {
+	width: 500px;
+}
+
+#header {
+	width: 100%;
+	min-height: 1em;
+	background: #1a1a1a;
+	color: #7F70D8;
+	font-weight: bold;
+	text-align: left;
+	padding: 1em;
+	margin: 0;
+	overflow: hidden;
+	border-bottom: thick solid #7F70D8;
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+	position: fixed;
+	z-index: 40;
+	top: 0;
+	left: 0;
+}
+
+#logout {
+	float: right;
+	margin-right: 2em;
+}
+
+.clickable:hover {
+	text-decoration: underline;
+}
+
+#message.success {
+	padding: .4em 0;
+	margin: .5em 0;
+	text-align: center;
+	background: #fff;
+	border-color: #5ED2B8;
+	color: #5ED2B8;
+}
+
+#today {
+	color: #bbb;
+	position: relative;
+	top: -25px;
+}
+
+#createTrip {
+	float: right;
+	margin-top: -3em;
+}
+
+#tripDisplay {
+	text-align: center;
+	border: thick solid #6996D3;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 5px 5px 10px;
+}
+#tripDisplayTable {
+	width: 100%;
+}
+
+#tripDisplayTable th {
+	min-width: 140px;
+}
+
+#tripDisplayTable tr:nth-child(odd) {
+	background: #f3f3f3;
+}
+
+#tripDisplayTable td {
+	max-width: 220px;
+	word-wrap: break-word;
+}
+
+#welcome, h1 {
+	font-family: 'Patua One', georgia;
+}

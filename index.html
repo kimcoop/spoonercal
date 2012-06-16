@@ -8,47 +8,54 @@
 <link rel="stylesheet" href="stylesheets/reset.css">
 <link rel="stylesheet" href="stylesheets/styles.css">
 <link rel="stylesheet" href="stylesheets/ms_style.css">
+<link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
 
 <script type="text/javascript">
 Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
 $(function() {
-
-$("#goButton").click(function() {
-	var username = $('#username').attr('value');
-	var password = $('#password').attr('value');
-	var email = $('#email').attr('value');
 	
-	var user = new Parse.User();
-	user.set("username", username);
-	user.set("password", password);
-	user.set("email", email);
-	
-	user.signUp(null, {
-	  success: function(user) {
+	var currentUser = Parse.User.current();
+	if (currentUser) {
 		location.href='home.html';
-	  },
-	  error: function(user, error) {
-		// Show the error message somewhere and let the user try again.
-		alert("Error: " + error.code + " " + error.message);
-	  }
-	});
-});  //click 
-	
-$('#login').click(function() {
-	var username = $('#l_username').attr('value');
-	var pw = $('#l_password').attr('value');
+	}
 
-	Parse.User.logIn(username, pw, {
-		success: function(user) {
+	$("#goButton").click(function() {
+		var username = $('#username').attr('value');
+		var password = $('#password').attr('value');
+		var email = $('#email').attr('value');
+		
+		var user = new Parse.User();
+		user.set("username", username);
+		user.set("password", password);
+		user.set("email", email);
+		
+		user.signUp(null, {
+		  success: function(user) {
 			location.href='home.html';
-		},
-		error: function(user, error) {
-			$('#message').text('Error logging in.').fadeIn().delay(2400).fadeOut();
-			console.log(error);
-		}
-	});
+		  },
+		  error: function(user, error) {
+			// Show the error message somewhere and let the user try again.
+			alert("Error: "+ error.message);
+		  }
+		});
+	});  //click 
+		
+	$('#login').click(function() {
+		var username = $('#l_username').attr('value');
+		var pw = $('#l_password').attr('value');
+	
+		Parse.User.logIn(username, pw, {
+			success: function(user) {
+				location.href='home.html';
+			},
+			error: function(user, error) {
+				$('#message').text('Error logging in.').fadeIn().delay(2400).fadeOut();
+				console.log(error);
+			}
+		});
 
 }); // login
 
@@ -83,6 +90,7 @@ $('#do_login').click(function() {
 	width: 500px;
 	padding: 30px 10px 0 10px;
 }
+
 
 </style>
   

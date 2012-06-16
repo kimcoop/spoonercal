@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="stylesheets/styles.css">
 <link rel="stylesheet" href="stylesheets/ms_style.css">
 <link rel="stylesheet" href="stylesheets/jquery-ui.css">
+<link href='http://fonts.googleapis.com/css?family=Patua+One' rel='stylesheet' type='text/css'>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.0.4.min.js"></script>
@@ -52,15 +53,26 @@ $(function() {
 	});
 	
 	$('#postTrip').click(function() {
-		var p = $('#people'); 
-		var s = $('#start'); 
-		var e = $('#end');
-		var n = $('#notes');
-		
-		var people = p.attr('value');
-		var start = s.attr('value');
-		var end = e.attr('value');
-		var notes = n.attr('value');
+			postTrip();
+		}); // postTrip
+	
+	queryTrips(false);
+	
+});
+
+function postTrip() {
+
+	var p = $('#people'); 
+	var s = $('#start'); 
+	var e = $('#end');
+	var n = $('#notes');
+	
+	var people = p.attr('value');
+	var start = s.attr('value');
+	var end = e.attr('value');
+	var notes = n.attr('value');
+	
+	if (people != '' && start != '' && end != '') {
 	
 		var Trip = Parse.Object.extend("Trip");
 		var trip = new Trip();
@@ -81,13 +93,13 @@ $(function() {
 			n.text('value', '');
 								
 		  }// success
-		}); // postTrip
-    
-	});
+		}); // save trip
 	
-	queryTrips(false);
-	
-});
+	} else {
+		alert('Please fill in people, start date, and end date.');
+	}
+
+}; // postTrip
 
 function queryTrips(animate) {
 
@@ -135,100 +147,6 @@ function queryTrips(animate) {
 
 <style>
 
-#tripEditor {
-	display: none;
-	text-align: center;
-	border: thick solid #5ED2B8;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	padding: 5px 5px 10px;
-}
-
-#tripTable {
-	width: 100%;
-}
-
-#tripTable td.label {
-	text-align: right;
-	width: 200px;
-}
-
-#tripTable input, #tripTable textarea {
-	width: 500px;
-}
-
-#header {
-	width: 100%;
-	min-height: 1em;
-	background: #1a1a1a;
-	color: #7F70D8;
-	font-weight: bold;
-	text-align: left;
-	padding: 1em;
-	margin: 0;
-	overflow: hidden;
-	border-bottom: thick solid #7F70D8;
-	-webkit-box-shadow: 0 8px 6px -6px black;
-	   -moz-box-shadow: 0 8px 6px -6px black;
-	        box-shadow: 0 8px 6px -6px black;
-	position: fixed;
-	z-index: 40;
-	top: 0;
-	left: 0;
-}
-
-#logout {
-	float: right;
-	margin-right: 2em;
-}
-
-.clickable:hover {
-	text-decoration: underline;
-}
-
-#message.success {
-	padding: .4em 0;
-	margin: .5em 0;
-	text-align: center;
-	background: #fff;
-	border-color: #5ED2B8;
-	color: #5ED2B8;
-}
-
-#today {
-	color: #bbb;
-	position: relative;
-	top: -25px;
-}
-
-#createTrip {
-	float: right;
-	margin-top: -3em;
-}
-
-#tripDisplay {
-	text-align: center;
-	border: thick solid #6996D3;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	padding: 5px 5px 10px;
-}
-#tripDisplayTable {
-	width: 100%;
-}
-
-#tripDisplayTable th {
-	min-width: 140px;
-}
-
-#tripDisplayTable tr:nth-child(odd) {
-	background: #f3f3f3;
-}
-
-#tripDisplayTable td {
-	max-width: 220px;
-	word-wrap: break-word;
-}
 
 </style>
 
@@ -243,7 +161,7 @@ function queryTrips(animate) {
   
   <div id="main">
   	<br><br>
-    <div><h2>Welcome back, <span class='username'></span></h2>
+    <div id="welcome"><h2>Welcome, <span class='username'></span></h2></div>
     <span id="today"></span>
     <h4 id="createTrip" class="clickable">Post your Spooner trip&nbsp;&raquo;</h4>
     <div id="message"></div>    
@@ -281,7 +199,25 @@ function queryTrips(animate) {
     	</table>
     </div><!-- tripDisplay -->
     
-  </div>
+    <!--
+    
+    <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'myspooner'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    -->
+    
+  </div><!-- main -->
 
 </body>
 
