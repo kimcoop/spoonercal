@@ -113,7 +113,6 @@ input[type="text"] {
 
 
 #tripEditor {
-	display: none;
 	text-align: center;
 	border: thick solid #5ED2B8;
 	border-radius: 5px;
@@ -131,7 +130,7 @@ input[type="text"] {
 }
 
 #tripTable input, #tripTable textarea {
-	width: 500px;
+	width: 600px;
 }
 
 #header {

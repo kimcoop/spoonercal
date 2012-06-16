@@ -29,23 +29,9 @@ $(function() {
 		location.href = 'index.html';
 	}   
 	
-	var today = $.datepicker.formatDate('DD, MM dd, yy', new Date());
-	$('#today').text(today);
-    
-    $("#logout").click(function() {
-	    Parse.User.logOut();
-
-		var currentUser = Parse.User.current();  // this will now be null
-		location.href='index.html';
-    });
-    
-	$('#createTrip').click(function() {
-	
-		$('#tripEditor').slideToggle();
-	
-	});// createTrip
-	
 	$('#start').datetimepicker({
+		prevText: 'Prev',
+		nextText: 'Next',
 		ampm: true
 	});
 	$('#end').datetimepicker({
@@ -55,13 +41,9 @@ $(function() {
 	$('#postTrip').click(function() {
 			postTrip();
 		}); // postTrip
-	
-	queryTrips(false);
-	
-	$('#viewCal').click(function() {
-		location.href='calendar.html';
-	});
-	
+		
+	$('.ui-icon .ui-icon-circle-triangle-w').text('&laquo;');
+		
 });
 
 function postTrip() {
@@ -88,7 +70,7 @@ function postTrip() {
 		trip.save(null, {
 		  success: function(trip) {
 			$('#tripEditor').slideUp('slow', function() {
-				queryTrips(true);
+				$('#message').html('Trip posted! See the <a class="green clickable" style="text-decoration:underline" href="calendar.html">calendar</a>.').addClass('success').fadeIn();
 			});	
 			
 			p.attr('value', '');
@@ -105,45 +87,6 @@ function postTrip() {
 
 }; // postTrip
 
-function queryTrips(animate) {
-
-	var Trip = Parse.Object.extend("Trip");
-	var query = new Parse.Query(Trip);
-	query.descending("createdAt");
-	query.find({
-	  success: function(results) {
-	  	var numTrips = results.length;
-	  	$('#numTripsPosted').text(numTrips);
-	  	var el = $('#tripDisplayTable');
-	  	var tripsStr = '';
-	  	
-	  	for (var i = 0; i < numTrips; i++) {
-	  		var trip = results[i];
-		  	var publisher = trip.get("publisher");
-		  	var pubDate = new Date(trip.createdAt);	  	
-		  	
-			var d = $.datepicker.formatDate('m/dd', pubDate);		  	
-		  	
-		  	var ppl = trip.get("people");
-		  	var start = trip.get("start");
-		  	var end = trip.get("end");
-		  	var notes = trip.get("notes");
-		  	var str = ppl + " from " + start + " til " + end + " (posted by " +publisher+")";
-		  	var str = '<td class=over>'+ppl+'</td><td>'+start+'</td><td>'+end+'</td><td class=over>'+notes+'</td><td>'+d+' by ' +publisher+'</td>';
-		  	
-		  	tripsStr += '<tr>' + str + '</tr>';
-		}
-		
-		if (animate) el.fadeOut().append(tripsStr).fadeIn();
-		else el.append(tripsStr);
-	  	
-	  },
-	  error: function(error) {
-		console.log("Error: " + error.code + " " + error.message);
-	  }
-	});
-
-};
 
 </script>
   
@@ -174,10 +117,9 @@ function queryTrips(animate) {
 	</div><!-- header -->
   
   <div id="main">
-  	<br><br>
-    <div id="welcome"><h2>Welcome, <span class='username'></span></h2></div>
-    <span id="today"></span>
-    <h4 id="createTrip" class="clickable">Post your Spooner trip&nbsp;&raquo;</h4>
+  	<br><br><br>
+  	
+    <h1>Your Spooner Trip</h1>
     <div id="message"></div>    
     
     <div id="tripEditor">
@@ -196,41 +138,7 @@ function queryTrips(animate) {
     	<input id="postTrip" type="button" value="Post Trip!"/>
     
     </div><!-- /tripEditor -->
-    <br><br>
-    <h1><span id="numTripsPosted"></span> Trips Posted</h1>
-    <h4 id="viewCal" class="clickable">View the Calendar&nbsp;&raquo;</h4>
-    <div id="tripDisplay">
-    	<table id="tripDisplayTable">
-    		<thead>
-    			<tr>
-    				<th>People</th>
-    				<th>Arriving</th>
-    				<th>Leaving</th>
-    				<th>Notes</th>
-    				<th>Posted on</th>
-    			</tr>
-    		</thead>
-    	
-    	</table>
-    </div><!-- tripDisplay -->
     
-    <!--
-    
-    <div id="disqus_thread"></div>
-        <script type="text/javascript">
-            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-            var disqus_shortname = 'myspooner'; // required: replace example with your forum shortname
-
-            /* * * DON'T EDIT BELOW THIS LINE * * */
-            (function() {
-                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    -->
     
   </div><!-- main -->
 
