@@ -34,6 +34,8 @@
 }
 
 .post {
+	clear: both;
+	overflow: hidden;
 	padding: 10px 5px;
 	border-bottom: 3px solid #6996D3;
 }
@@ -57,4 +59,22 @@
 .content {
 	position: relative;
 	top: -10px;
+}
+
+.commentBox textarea {
+	width: 90%;
+	float: left;
+}
+
+.postComment {
+	margin: 5px 3px 0 0;
+	float: right;
+}
+
+.commentBox {
+	display: none;
+}
+
+.comments {
+	clear: both;
 }

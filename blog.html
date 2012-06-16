@@ -44,7 +44,65 @@ $(function() {
 		postBlog();
 	});
 	
+	$('.addComment').live('click', function() {
+		var el = $(this);
+		el.siblings('.commentBox').slideDown();
+	});
+	
+	$('.postComment').live('click', function() {
+		var el = $(this);
+		var textbox = el.siblings('textarea');
+		var text = textbox.attr('value');
+		var postIdArr = textbox.attr('id');
+		var postId = postIdArr.split('_').pop();
+		postComment(postId, text);
+	}); //postComment
+	
+	$('.viewComments').live('click', function() {
+		var postId = $(this).attr('id').split('_').pop();
+		viewComments(postId);
+	});
+	
 });
+
+function viewComments(postId) {
+
+	var query = new Parse.Query('Comment');
+	query.equalTo("postId", postId);
+	query.find({
+	  success: function(comments) {
+	  	var num = comments.length;
+		console.log(comments);
+		var el = $('#commentsFor_'+postId);
+		if (num==0) {
+			el.append('No comments');
+		} else {
+			el.append(comments);
+		}
+	  }
+	});
+
+}; // viewComments
+
+function postComment(postId, content) {
+	
+	if (postId != '' && content != '') {
+	
+		var Comment = Parse.Object.extend("Comment");
+		var comment = new Comment();
+		comment.set("postId", postId);
+		comment.set("content", content);
+		comment.set("author", Parse.User.current().get('username'));
+		comment.save(null, {
+		  success: function(comment) {
+		  	queryPosts(true);
+		  }// success
+		}); // save post
+	
+	} else {
+		alert('Comment body is empty.');
+	}
+}; // post Comment
 
 function queryPosts(animate) {
 
@@ -59,11 +117,12 @@ function queryPosts(animate) {
 	  	
 	  	for (var i = 0; i < numPosts; i++) {
 	  		var post = results[i];
+	  		var postId = post.id;
 		  	var pubDate = post.createdAt;
 		  	var title = post.get("title");
 		  	var author = post.get("author");
 		  	var content = post.get("content");
-		  	postsStr += divify(pubDate, title, author, content);
+		  	postsStr += divify(postId, pubDate, title, author, content);
 		} //foreach
 	  	
 	  	if (!animate) $('#blog').html(postsStr);
@@ -89,18 +148,17 @@ function postBlog() {
 	var t = $('#blogTitle'); 
 	var c = $('#content');	
 	var title = t.attr('value');
-	alert(title);
 	var content = c.attr('value');
 	
 	if (title != '' && content != '') {
 	
-		var Trip = Parse.Object.extend("Post");
-		var trip = new Trip();
-		trip.set("title", title);
-		trip.set("content", content);
-		trip.set("author", Parse.User.current().get('username'));
-		trip.save(null, {
-		  success: function(trip) {
+		var Post = Parse.Object.extend("Post");
+		var post = new Post();
+		post.set("title", title);
+		post.set("content", content);
+		post.set("author", Parse.User.current().get('username'));
+		post.save(null, {
+		  success: function(post) {
 			$('#blogPost').slideUp('slow', function() {
 				queryPosts(true);
 			});	
@@ -116,13 +174,26 @@ function postBlog() {
 
 }; // postTrip
 
-function divify(pubDate, title, author, content) {
+function divify(postId, pubDate, title, author, content) {
 	var d = $.datepicker.formatDate('DD, MM d, yy ', new Date(pubDate));
 	
-	var output = '<div class="post">';
+	var output = '<div class="post" id="postId">';
 		output += '<h2 class=title>'+title+'</h2>';
 		output += '<div class=details>Posted '+d+' by ' +author + '</div>';
-		output += '<div class=content>'+content+'</div>';	
+		output += '<div class=content>'+content+'</div>';
+		
+		output += '<h4 class="clickable viewComments" id="viewCommentsFor_'+postId+'">View Comments&nbsp;&raquo;</h4>';
+		
+		output += '<h4 class="clickable addComment">Add a comment&nbsp;&raquo;</h4>';
+		output += '<div class=commentBox>';
+			output += '<textarea id="commentFor_'+postId+'" placeholder="Your comment here">';
+			output += '</textarea>';
+			output += '<input class=postComment type=button value=Post />';
+		output += '</div>';
+		
+		output += '<div class=comments id="commentsFor_'+postId+'">';
+		output += '</div>';
+			
 	output += '</div>';
 	return output;
 	
