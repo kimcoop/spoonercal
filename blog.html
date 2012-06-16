@@ -53,6 +53,7 @@ $(function() {
 		var el = $(this);
 		var textbox = el.siblings('textarea');
 		var text = textbox.attr('value');
+		textbox.attr('value', '');
 		var postIdArr = textbox.attr('id');
 		var postId = postIdArr.split('_').pop();
 		postComment(postId, text);
@@ -99,7 +100,7 @@ function postComment(postId, content) {
 		comment.set("author", Parse.User.current().get('username'));
 		comment.save(null, {
 		  success: function(comment) {
-		  	queryPosts(true);
+		  	viewComments(postId);
 		  }// success
 		}); // save post
 	
