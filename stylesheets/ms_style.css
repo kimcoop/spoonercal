@@ -7,6 +7,7 @@
 body {
 	font-family: "Helvetica Neue Light", arial;
 	color: #555;
+	background: transparent url('http://www.free-desktop-backgrounds.net/free-desktop-wallpapers-backgrounds/free-hd-desktop-wallpapers-backgrounds/723860876.jpg') no-repeat top center;
 }
 
 .clickable {
@@ -50,6 +51,9 @@ input[type="password"], input[type="search"], input[type="text"], input[type="te
 	font-size: .9em;
 }
 
+input[type="text"] {
+	position: relative; z-index: 100000;
+}
 
 #do_signup, #do_login {
 	width: 100%;
