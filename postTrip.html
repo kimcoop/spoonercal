@@ -58,21 +58,28 @@ $(function() {
 function editTrip(tripId) {
 
 	var row = $('#'+tripId);
+	var str = '';
+	
 	row.children('td.edit').each(function() {
 		var el = $(this);
 		var orig = el.text();
-		var newEl = $('<input type=text value='+orig+' class=saveTrip />');
-		
+		var putClass = '';
 		if (el.hasClass('date')) {
-			newEl.datetimepicker({
-				ampm: true
-			});
-		}// if
-		
-		el.replaceWith(newEl);
-		
+			putClass = 'date';
+		}
+		var name = el.attr('data-name');
+		str += name;
+		str += '&nbsp;&nbsp;<input type=text class="'+putClass+'" value='+orig+' class=saveTrip /><br>';
 	});
 	
+	$('#editingTrip').html(str).dialog({ 
+		modal: true,
+		buttons: { 
+			"Ok": function() { $(this).dialog("close"); },
+			"Cancel": function() { $(this).dialog("close"); }
+	 	},
+	 	title: "Editing Trip"
+	 });
 
 }; // editTrip
 
@@ -119,7 +126,7 @@ function listTrips(trips) {
 		var end = trip.get("end");
 		var notes = trip.get("notes");
 		var str = ppl + " from " + start + " til " + end;
-		var str = '<td class=edit>'+ppl+'</td><td class="edit date">'+start+'</td><td class="edit date">'+end+'</td><td class=edit>'+notes+'</td><td>'+d+'</td>';
+		var str = '<td class=edit data-name=Title>'+ppl+'</td><td class="edit date" data-name=Start>'+start+'</td><td data-name=End class="edit date">'+end+'</td><td data-name=Notes class=edit>'+notes+'</td><td>'+d+'</td>';
 		str += '<td><span id="editTrip_'+tripId+'" class="green clickable edit">Edit</span>&nbsp;&nbsp;';
 		str += '<span id="deleteTrip_'+tripId+'" class="green clickable delete">Delete</span></td>';
 		
@@ -182,6 +189,22 @@ function postTrip() {
 	padding: 30px 20px;
 }
 
+input[type="text"] {
+	z-index: 99;
+}
+
+#editingTrip {
+	font-family: "Helvetica Neue";
+	font-weight: lighter;
+	padding: 10px;
+}
+
+#editingTrip input {
+	margin: 5px 0;
+	font-family: "Helvetica Neue";
+	font-weight: lighter;
+}
+
 </style>
 
 <body>
@@ -230,6 +253,7 @@ function postTrip() {
     
     <h1>Your Trips</h1>
     <div id="yourTrips">
+    <div id="editingTrip"></div>
     <table id="yourTripsTable">
 		<thead>
 			<tr>
