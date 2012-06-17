@@ -44,14 +44,43 @@ $(function() {
 	getTrips();
 	
 	$('.edit').live('click', function() {
-		alert('edit lcicked');
+		var tId = $(this).attr('id').split('_').pop();
+		editTrip(tId);				
 	});
 	
 	$('.delete').live('click', function() {
-		alert('delete clicked');
+		var tId = $(this).attr('id').split('_').pop();
+		deleteTrip(tId);		
 	});
 		
 });
+
+function editTrip(tripId) {
+
+	var row = $('#'+tripId);
+	row.children('td.edit').each(function() {
+		var el = $(this);
+		var orig = el.text();
+		var newEl = $('<input type=text value='+orig+' class=saveTrip />');
+		
+		if (el.hasClass('date')) {
+			newEl.datetimepicker({
+				ampm: true
+			});
+		}// if
+		
+		el.replaceWith(newEl);
+		
+	});
+	
+
+}; // editTrip
+
+function deleteTrip(tripId) {
+
+	alert('deleting ' +tripId);
+
+}; //deleteTrip
 
 function getTrips() {
 	
@@ -84,17 +113,17 @@ function listTrips(trips) {
 		var pubDate = new Date(trip.createdAt);	  	
 		
 		var d = $.datepicker.formatDate('m/dd', pubDate);		  	
-		
+		var tripId = trip.id;
 		var ppl = trip.get("people");
 		var start = trip.get("start");
 		var end = trip.get("end");
 		var notes = trip.get("notes");
 		var str = ppl + " from " + start + " til " + end;
-		var str = '<td class=over>'+ppl+'</td><td>'+start+'</td><td>'+end+'</td><td class=over>'+notes+'</td><td>'+d+'</td>';
-		str += '<td><span class="green clickable edit">Edit</span>&nbsp;&nbsp;';
-		str += '<span class="green clickable delete">Delete</span></td>';
+		var str = '<td class=edit>'+ppl+'</td><td class="edit date">'+start+'</td><td class="edit date">'+end+'</td><td class=edit>'+notes+'</td><td>'+d+'</td>';
+		str += '<td><span id="editTrip_'+tripId+'" class="green clickable edit">Edit</span>&nbsp;&nbsp;';
+		str += '<span id="deleteTrip_'+tripId+'" class="green clickable delete">Delete</span></td>';
 		
-		tripsStr += '<tr>' + str + '</tr>';
+		tripsStr += '<tr id="'+tripId+'">' + str + '</tr>';
 	}
 	
 	el.append(tripsStr);
