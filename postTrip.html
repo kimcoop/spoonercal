@@ -44,7 +44,7 @@ $(function() {
 			postTrip();
 	}); // postTrip
 	
-	getTrips();
+	getTrips(false);
 	
 	$('.edit').live('click', function() {
 		var tId = $(this).attr('id').split('_').pop();
@@ -97,7 +97,7 @@ function updateTrip(tripId, trip) {
 	trip.set('notes', notes);
 	trip.save(null, {
 	  success: function(tripObj) {
-		alert('saved');
+		getTrips(true);
 		usersTrip[tripId] = trip;
 	  },
 	  error: function(tripObj, error) {
@@ -109,11 +109,24 @@ function updateTrip(tripId, trip) {
 
 function deleteTrip(tripId) {
 
-	alert('deleting ' +tripId);
+	var t = confirm('Are you sure you?');
+	if (t) {
+	
+		var trip = userTrips[tripId];
+	
+		trip.destroy({
+		  success: function(myObject) {
+			getTrips(true);
+		  },
+		  error: function(myObject, error) {
+			console.log(error);
+		  }
+		});
+	}
 
 }; //deleteTrip
 
-function getTrips() {
+function getTrips(animate) {
 	
 	var Trip = Parse.Object.extend("Trip");
 	var query = new Parse.Query(Trip);
@@ -124,7 +137,7 @@ function getTrips() {
 	  	if (results.length == 0) {
 			$('#yourTrips').html('You haven\'t posted any trips or events yet!');
 		} else {
-			listTrips(results);
+			listTrips(results, animate);
 		}
 	  },
 	  error: function(error) {
@@ -134,10 +147,11 @@ function getTrips() {
 
 }; // getTrips
 
-function listTrips(trips) {
+function listTrips(trips, animate) {
 
 	var el = $('#yourTripsTable');
 	var tripsStr = '';
+	tripsStr += '<thead><tr><th>Title</th><th>Beginning</th><th>Ending</th><th>Notes</th><th>Posted</th><th>Actions</th></tr></thead>';
 	
 	for (var i = 0; i < trips.length; i++) {
 		var trip = trips[i];
@@ -160,7 +174,10 @@ function listTrips(trips) {
 		tripsStr += '<tr id="'+tripId+'">' + str + '</tr>';
 	}
 	
-	el.append(tripsStr);
+	if (!animate) el.html(tripsStr);
+	else {
+		el.fadeOut().html(tripsStr).fadeIn();
+	}	
 
 }; // listTrips
 
@@ -255,9 +272,9 @@ input[type="text"] {
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a class="purple clickable" href="blog.html">Blog</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a id="tripPage" class="purple clickable" href="postTrip.html">Post Trip</a>
+			<a id="tripPage" class="purple clickable" href="postTrip.html">Your Trips</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a id="calPage" class="purple clickable" href="calendar.html">View Calendar</a>
+			<a id="calPage" class="purple clickable" href="calendar.html">Calendar</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>	
 		</div>	
@@ -291,23 +308,12 @@ input[type="text"] {
     
     <h1>Your Trips</h1>
     <div id="yourTrips">
-    <div id="editingTrip"></div>
-    <table id="yourTripsTable">
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>Beginning</th>
-				<th>Ending</th>
-				<th>Notes</th>
-				<th>Posted</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-	
-	</table>    
+		<table id="yourTripsTable">
+		</table>    
     </div><!-- /yourTrips -->    
     
   </div><!-- main -->
+<div id="editingTrip"></div>
 
 </body>
 

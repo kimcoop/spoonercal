@@ -64,7 +64,7 @@ function queryTrips() {
 		  	
 			var d = $.datepicker.formatDate('m/dd', pubDate);		  	
 		  	
-		  	var ppl = trip.get("people");
+		  	var ppl = trip.get('title');
 		  	var start = trip.get("start");
 		  	var end = trip.get("end");
 		  	var notes = trip.get("notes");
@@ -106,9 +106,9 @@ function queryTrips() {
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<a class="purple clickable" href="blog.html">Blog</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a id="tripPage" class="purple clickable" href="postTrip.html">Post Trip</a>
+			<a id="tripPage" class="purple clickable" href="postTrip.html">Your Trips</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<a id="calPage" class="purple clickable" href="calendar.html">View Calendar</a>
+			<a id="calPage" class="purple clickable" href="calendar.html">Calendar</a>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<span id="logout" class="clickable">Logout&nbsp;&raquo;</span>	
 		</div>	
@@ -127,7 +127,7 @@ function queryTrips() {
     	<table id="tripDisplayTable">
     		<thead>
     			<tr>
-    				<th>People</th>
+    				<th>Title</th>
     				<th>Beginning</th>
     				<th>Ending</th>
     				<th>Notes</th>
