@@ -20,6 +20,9 @@
 //Parse.initialize("D97nDywXEJzA0PXEh1nXG5DSQPQQMxzfC2w7m3ax", "rxs8WSYJRG75gDSnsgsjF3qxGBDV5SdqHnQXS5WA");
 Parse.initialize("CMAivk3SGCrLkZZ51JIwCYgB37Y7EWDx9uqxdowi", "uKcCk2dgJqC2QXRsQWJBUqpCONULL9KdlfrGiMGm");
 
+var userTrips = new Array();
+var updatedTrips = new Array();
+
 $(function() {
 		
 	var currentUser = Parse.User.current();
@@ -59,29 +62,50 @@ function editTrip(tripId) {
 
 	var row = $('#'+tripId);
 	var str = '';
+	var trip = userTrips[tripId];
 	
-	row.children('td.edit').each(function() {
-		var el = $(this);
-		var orig = el.text();
-		var putClass = '';
-		if (el.hasClass('date')) {
-			putClass = 'date';
-		}
-		var name = el.attr('data-name');
-		str += name;
-		str += '&nbsp;&nbsp;<input type=text class="'+putClass+'" value='+orig+' class=saveTrip /><br>';
-	});
+	str += 'Title <input type=text class=saveTrip value="'+trip.get('title')+'" /><br>';
+	str += 'Start <input type=text class=saveTrip value="'+trip.get('start')+'" /><br>';
+	str += 'End <input type=text class=saveTrip value="'+trip.get('end')+'" /><br>';
+	str += 'Notes <textarea class=saveTrip>'+trip.get('notes')+'</textarea><br>';
+	
 	
 	$('#editingTrip').html(str).dialog({ 
-		modal: true,
+		modal: false,
+		zIndex: 999999999999,
 		buttons: { 
-			"Ok": function() { $(this).dialog("close"); },
+			"Save": function() { $(this).dialog("close"); updateTrip(tripId, trip); },
 			"Cancel": function() { $(this).dialog("close"); }
 	 	},
 	 	title: "Editing Trip"
 	 });
 
 }; // editTrip
+
+function updateTrip(tripId, trip) {
+	
+	var fields = $('.saveTrip');
+	
+	var title = $(fields[0]).attr('value');
+	var start = $(fields[1]).attr('value');
+	var end = $(fields[2]).attr('value');
+	var notes = $(fields[3]).attr('value');
+	
+	trip.set('title', title);
+	trip.set('start', start);
+	trip.set('end', end);
+	trip.set('notes', notes);
+	trip.save(null, {
+	  success: function(tripObj) {
+		alert('saved');
+		usersTrip[tripId] = trip;
+	  },
+	  error: function(tripObj, error) {
+		console.log(error);
+	  }
+	});
+
+}; //prepUpdateTrip
 
 function deleteTrip(tripId) {
 
@@ -117,11 +141,14 @@ function listTrips(trips) {
 	
 	for (var i = 0; i < trips.length; i++) {
 		var trip = trips[i];
-		var pubDate = new Date(trip.createdAt);	  	
 		
-		var d = $.datepicker.formatDate('m/dd', pubDate);		  	
+		var pubDate = new Date(trip.createdAt);	  	
+		var d = $.datepicker.formatDate('m/dd/y', pubDate);		  	
+		
 		var tripId = trip.id;
-		var ppl = trip.get("people");
+		userTrips[tripId] = trip; // track it
+		
+		var ppl = trip.get("title");
 		var start = trip.get("start");
 		var end = trip.get("end");
 		var notes = trip.get("notes");
@@ -153,7 +180,7 @@ function postTrip() {
 	
 		var Trip = Parse.Object.extend("Trip");
 		var trip = new Trip();
-		trip.set("people", people);
+		trip.set('title', people);
 		trip.set("start", start);
 		trip.set("end", end);
 		trip.set("notes", notes);
@@ -199,10 +226,21 @@ input[type="text"] {
 	padding: 10px;
 }
 
-#editingTrip input {
+#editingTrip input, #editingTrip textarea {
 	margin: 5px 0;
 	font-family: "Helvetica Neue";
 	font-weight: lighter;
+}
+
+
+#editingTrip .ui-widget {
+	font-family: 'Helvetica Neue';
+	font-weight: lighter;
+}
+
+#yourTripsTable td {
+	min-width: 80px;
+	max-width: 150px;
 }
 
 </style>
@@ -257,7 +295,7 @@ input[type="text"] {
     <table id="yourTripsTable">
 		<thead>
 			<tr>
-				<th>People</th>
+				<th>Title</th>
 				<th>Beginning</th>
 				<th>Ending</th>
 				<th>Notes</th>

@@ -64,7 +64,7 @@ function queryTrips(start, end, callback) {
 	  		var trip = results[i];
 		  	var start = new Date(trip.get("start"));	  
 		  	var end = new Date(trip.get("end"));
-		  	var title = trip.get("people");	
+		  	var title = trip.get('title');	
 		  	
 			events.push({
 				title: title,
